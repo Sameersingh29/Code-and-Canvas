@@ -17,8 +17,12 @@ const Portfolio = () => {
         <div className="portfolio-grid">
           {portfolioProjects.map((project) => (
             <Card key={project.id} className="portfolio-card">
-              <div className="portfolio-image-placeholder">
-                <span className="portfolio-placeholder-text">{project.title}</span>
+              <div className="portfolio-image-container">
+                <img 
+                  src={project.image} 
+                  alt={project.title}
+                  className="portfolio-image"
+                />
               </div>
               <CardHeader>
                 <div className="portfolio-header">
