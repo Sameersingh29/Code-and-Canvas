@@ -6,35 +6,40 @@ export const portfolioProjects = [
     title: "Artisan Bakery Co.",
     description: "A warm and inviting landing page for a local bakery, featuring online ordering and menu showcase.",
     category: "Food & Beverage",
-    tags: ["E-commerce", "Responsive", "Modern"]
+    tags: ["E-commerce", "Responsive", "Modern"],
+    image: "https://images.unsplash.com/photo-1568254183919-78a4f43a2877?crop=entropy&cs=srgb&fm=jpg&q=85"
   },
   {
     id: 2,
     title: "FitLife Coaching",
     description: "High-conversion landing page for a fitness coaching business with booking integration and testimonials.",
     category: "Health & Fitness",
-    tags: ["Conversion-focused", "Bold Design", "Mobile-first"]
+    tags: ["Conversion-focused", "Bold Design", "Mobile-first"],
+    image: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?crop=entropy&cs=srgb&fm=jpg&q=85"
   },
   {
     id: 3,
     title: "GreenScape Landscaping",
     description: "Professional portfolio landing page showcasing landscaping projects with before/after galleries.",
     category: "Home Services",
-    tags: ["Portfolio", "Visual-heavy", "Clean"]
+    tags: ["Portfolio", "Visual-heavy", "Clean"],
+    image: "https://images.unsplash.com/photo-1597201278257-3687be27d954?crop=entropy&cs=srgb&fm=jpg&q=85"
   },
   {
     id: 4,
     title: "TechStart Consulting",
     description: "Corporate landing page for a tech consulting firm with service breakdowns and case studies.",
     category: "Technology",
-    tags: ["Professional", "B2B", "Elegant"]
+    tags: ["Professional", "B2B", "Elegant"],
+    image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?crop=entropy&cs=srgb&fm=jpg&q=85"
   },
   {
     id: 5,
     title: "Bloom Floral Studio",
     description: "Beautiful, image-rich landing page for a boutique florist with event planning services.",
     category: "Retail",
-    tags: ["Visual", "Elegant", "Booking"]
+    tags: ["Visual", "Elegant", "Booking"],
+    image: "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?crop=entropy&cs=srgb&fm=jpg&q=85"
   }
 ];
 
