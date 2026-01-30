@@ -164,3 +164,5 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "Implemented cinematic website redesign with AI-generated backgrounds using Gemini Nano Banana. Backend has /api/generate-image endpoint. Frontend uses scroll-snap layout with Framer Motion animations. Please test the image generation API."
+  - agent: "testing"
+    message: "✅ Backend testing completed successfully. Fixed critical route registration issue in server.py. All API endpoints now working: Health check (GET /api/) ✅, Image generation (POST /api/generate-image) ✅, Caching mechanism ✅. Image generation takes 14-18 seconds, caching reduces subsequent requests to 0.08 seconds (170x faster). Generated images are valid PNG format (~650KB). Ready for frontend integration testing if needed."
