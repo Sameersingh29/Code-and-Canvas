@@ -1,35 +1,15 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
-import Hero from "./components/Hero";
-import Services from "./components/Services";
-import Portfolio from "./components/Portfolio";
-import Benefits from "./components/Benefits";
-import Contact from "./components/Contact";
-import Footer from "./components/Footer";
+import CinematicLanding from "./components/CinematicLanding";
 import { Toaster } from "./components/ui/sonner";
-
-const Home = () => {
-  return (
-    <div className="landing-page">
-      <Header />
-      <Hero />
-      <Services />
-      <Portfolio />
-      <Benefits />
-      <Contact />
-      <Footer />
-    </div>
-  );
-};
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<CinematicLanding />} />
         </Routes>
       </BrowserRouter>
       <Toaster />
