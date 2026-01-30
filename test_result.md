@@ -107,15 +107,21 @@ user_problem_statement: "Build a high-end, cinematic Business website with full-
 backend:
   - task: "Image Generation API with Gemini Nano Banana"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented POST /api/generate-image endpoint using emergentintegrations library with Gemini Nano Banana model for cinematic image generation. Includes caching mechanism."
+      - working: false
+        agent: "testing"
+        comment: "Initial testing failed - routes not registered properly. Fixed route registration order issue in server.py (routes must be defined before app.include_router)."
+      - working: true
+        agent: "testing"
+        comment: "✅ All backend tests passed: Health check (GET /api/) working correctly. Image generation (POST /api/generate-image) successfully generates cinematic images using Gemini Nano Banana in ~15 seconds, returns valid base64 image data. Caching mechanism working perfectly - cached requests 170x faster (0.08s vs 14-18s). API handles test payload correctly: prompt='A cinematic view of a modern creative design studio', section_id='test-services'. Generated image size: 654KB, valid PNG format."
 
 frontend:
   - task: "Cinematic Landing Page with Scroll-Snap Layout"
