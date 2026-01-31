@@ -442,10 +442,10 @@ const ContactSection = () => {
           className="text-center mb-6 sm:mb-10"
         >
           <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-2 sm:mb-4">
-            Let's Work Together
+            Let&apos;s Work Together
           </h2>
           <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-xl mx-auto px-2">
-            Ready to bring your vision to life? Reach out and let's create something amazing.
+            Ready to bring your vision to life? Reach out and let&apos;s create something amazing.
           </p>
         </motion.div>
 
