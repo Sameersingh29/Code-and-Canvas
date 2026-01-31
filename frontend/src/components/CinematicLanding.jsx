@@ -418,7 +418,7 @@ const BenefitsContent = () => (
   </motion.div>
 );
 
-// Contact Section (Light theme)
+// Contact Section (Light theme) - Fully Responsive
 const ContactSection = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -430,19 +430,19 @@ const ContactSection = () => {
   };
 
   return (
-    <section className="snap-section relative h-screen w-full bg-gradient-to-br from-gray-50 to-white overflow-hidden">
-      <div className="h-full flex flex-col justify-center items-center px-6 md:px-16">
+    <section className="snap-section relative min-h-screen w-full bg-gradient-to-br from-gray-50 to-white overflow-y-auto">
+      <div className="min-h-screen flex flex-col justify-start sm:justify-center items-center px-4 sm:px-6 md:px-12 lg:px-16 pt-20 sm:pt-24 pb-16 sm:pb-12">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-10"
+          className="text-center mb-6 sm:mb-10"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-2 sm:mb-4">
             Let's Work Together
           </h2>
-          <p className="text-lg text-gray-600 max-w-xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-xl mx-auto px-2">
             Ready to bring your vision to life? Reach out and let's create something amazing.
           </p>
         </motion.div>
@@ -452,74 +452,74 @@ const ContactSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
-          className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8"
+          className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8"
         >
           {/* Contact Info */}
-          <div className="bg-gradient-to-br from-violet-600 to-purple-700 rounded-2xl p-8 text-white">
-            <h3 className="text-2xl font-semibold mb-6">Get In Touch</h3>
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <Mail className="mt-1" size={20} />
-                <div>
-                  <p className="text-white/70 text-sm">Email</p>
-                  <a href="mailto:inquirecodeandcanvas@gmail.com" className="hover:underline">inquirecodeandcanvas@gmail.com</a>
+          <div className="bg-gradient-to-br from-violet-600 to-purple-700 rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 text-white order-2 md:order-1">
+            <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">Get In Touch</h3>
+            <div className="space-y-4 sm:space-y-6">
+              <div className="flex items-start gap-3 sm:gap-4">
+                <Mail className="mt-0.5 sm:mt-1 flex-shrink-0" size={18} />
+                <div className="min-w-0">
+                  <p className="text-white/70 text-xs sm:text-sm">Email</p>
+                  <a href="mailto:inquirecodeandcanvas@gmail.com" className="hover:underline text-sm sm:text-base break-all">inquirecodeandcanvas@gmail.com</a>
                 </div>
               </div>
-              <div className="flex items-start gap-4">
-                <Phone className="mt-1" size={20} />
+              <div className="flex items-start gap-3 sm:gap-4">
+                <Phone className="mt-0.5 sm:mt-1 flex-shrink-0" size={18} />
                 <div>
-                  <p className="text-white/70 text-sm">Phone</p>
-                  <p>+1 (555) 123-4567</p>
+                  <p className="text-white/70 text-xs sm:text-sm">Phone</p>
+                  <p className="text-sm sm:text-base">+1 (555) 123-4567</p>
                 </div>
               </div>
-              <div className="flex items-start gap-4">
-                <Instagram className="mt-1" size={20} />
+              <div className="flex items-start gap-3 sm:gap-4">
+                <Instagram className="mt-0.5 sm:mt-1 flex-shrink-0" size={18} />
                 <div>
-                  <p className="text-white/70 text-sm">Instagram</p>
-                  <p>@codeandcanvas</p>
+                  <p className="text-white/70 text-xs sm:text-sm">Instagram</p>
+                  <p className="text-sm sm:text-base">@codeandcanvas</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
-            <div className="space-y-4">
+          <form onSubmit={handleSubmit} className="bg-white rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 shadow-xl border border-gray-100 order-1 md:order-2">
+            <div className="space-y-3 sm:space-y-4">
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block">Name</label>
+                <label className="text-xs sm:text-sm font-medium text-gray-700 mb-1 block">Name</label>
                 <Input
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Your name"
-                  className="border-gray-200 focus:border-violet-500"
+                  className="border-gray-200 focus:border-violet-500 text-sm sm:text-base h-10 sm:h-11"
                   required
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block">Email</label>
+                <label className="text-xs sm:text-sm font-medium text-gray-700 mb-1 block">Email</label>
                 <Input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="your.email@example.com"
-                  className="border-gray-200 focus:border-violet-500"
+                  className="border-gray-200 focus:border-violet-500 text-sm sm:text-base h-10 sm:h-11"
                   required
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block">Message</label>
+                <label className="text-xs sm:text-sm font-medium text-gray-700 mb-1 block">Message</label>
                 <Textarea
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Tell us about your project..."
-                  rows={4}
-                  className="border-gray-200 focus:border-violet-500"
+                  rows={3}
+                  className="border-gray-200 focus:border-violet-500 text-sm sm:text-base resize-none"
                   required
                 />
               </div>
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white py-6"
+                className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white py-5 sm:py-6 text-sm sm:text-base touch-manipulation"
               >
                 Send Message
               </Button>
@@ -533,7 +533,7 @@ const ContactSection = () => {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           viewport={{ once: true }}
-          className="absolute bottom-6 text-center text-gray-500 text-sm"
+          className="mt-8 sm:mt-12 text-center text-gray-500 text-xs sm:text-sm"
         >
           © {new Date().getFullYear()} Code and Canvas. All rights reserved.
         </motion.div>
