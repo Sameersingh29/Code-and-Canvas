@@ -189,6 +189,183 @@ def test_caching():
         print(f"❌ Caching test failed - error: {e}")
         return False
 
+def test_contact_form_valid():
+    """Test valid contact form submission"""
+    print("\n=== Testing Contact Form - Valid Submission ===")
+    
+    test_payload = {
+        "name": "Test User",
+        "email": "test@example.com",
+        "message": "This is a test message from the backend testing. Please verify the email functionality is working correctly."
+    }
+    
+    try:
+        print(f"Making POST request to {BACKEND_URL}/api/send-contact")
+        print(f"Payload: {json.dumps(test_payload, indent=2)}")
+        
+        response = requests.post(
+            f"{BACKEND_URL}/api/send-contact",
+            json=test_payload,
+            timeout=30
+        )
+        
+        print(f"Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"Response: {json.dumps(data, indent=2)}")
+            
+            if "success" in data and "message" in data:
+                if data["success"] is True:
+                    print("✅ Valid contact form submission passed")
+                    return True
+                else:
+                    print(f"❌ Contact form returned success=false: {data['message']}")
+                    return False
+            else:
+                print("❌ Response missing required fields (success, message)")
+                return False
+        else:
+            print(f"❌ Contact form failed - status code {response.status_code}")
+            try:
+                error_data = response.json()
+                print(f"Error response: {json.dumps(error_data, indent=2)}")
+            except:
+                print(f"Error response (raw): {response.text}")
+            return False
+            
+    except Exception as e:
+        print(f"❌ Contact form test failed - error: {e}")
+        return False
+
+def test_contact_form_invalid_email():
+    """Test contact form with invalid email format"""
+    print("\n=== Testing Contact Form - Invalid Email ===")
+    
+    test_payload = {
+        "name": "Test User",
+        "email": "invalid-email",
+        "message": "Test message for validation"
+    }
+    
+    try:
+        print(f"Making POST request to {BACKEND_URL}/api/send-contact")
+        print(f"Payload: {json.dumps(test_payload, indent=2)}")
+        
+        response = requests.post(
+            f"{BACKEND_URL}/api/send-contact",
+            json=test_payload,
+            timeout=30
+        )
+        
+        print(f"Status Code: {response.status_code}")
+        
+        if response.status_code == 422:  # Validation error expected
+            data = response.json()
+            print(f"Response: {json.dumps(data, indent=2)}")
+            print("✅ Invalid email validation working correctly")
+            return True
+        elif response.status_code == 200:
+            print("❌ Invalid email was accepted - validation not working")
+            return False
+        else:
+            print(f"❌ Unexpected status code {response.status_code}")
+            try:
+                error_data = response.json()
+                print(f"Error response: {json.dumps(error_data, indent=2)}")
+            except:
+                print(f"Error response (raw): {response.text}")
+            return False
+            
+    except Exception as e:
+        print(f"❌ Invalid email test failed - error: {e}")
+        return False
+
+def test_contact_form_missing_name():
+    """Test contact form with missing required name field"""
+    print("\n=== Testing Contact Form - Missing Name Field ===")
+    
+    test_payload = {
+        "email": "test@example.com",
+        "message": "Test message with missing name field"
+    }
+    
+    try:
+        print(f"Making POST request to {BACKEND_URL}/api/send-contact")
+        print(f"Payload: {json.dumps(test_payload, indent=2)}")
+        
+        response = requests.post(
+            f"{BACKEND_URL}/api/send-contact",
+            json=test_payload,
+            timeout=30
+        )
+        
+        print(f"Status Code: {response.status_code}")
+        
+        if response.status_code == 422:  # Validation error expected
+            data = response.json()
+            print(f"Response: {json.dumps(data, indent=2)}")
+            print("✅ Missing name field validation working correctly")
+            return True
+        elif response.status_code == 200:
+            print("❌ Missing name field was accepted - validation not working")
+            return False
+        else:
+            print(f"❌ Unexpected status code {response.status_code}")
+            try:
+                error_data = response.json()
+                print(f"Error response: {json.dumps(error_data, indent=2)}")
+            except:
+                print(f"Error response (raw): {response.text}")
+            return False
+            
+    except Exception as e:
+        print(f"❌ Missing name test failed - error: {e}")
+        return False
+
+def test_contact_form_short_message():
+    """Test contact form with message too short (less than 10 characters)"""
+    print("\n=== Testing Contact Form - Message Too Short ===")
+    
+    test_payload = {
+        "name": "Test User",
+        "email": "test@example.com",
+        "message": "Short"  # Only 5 characters, should fail validation
+    }
+    
+    try:
+        print(f"Making POST request to {BACKEND_URL}/api/send-contact")
+        print(f"Payload: {json.dumps(test_payload, indent=2)}")
+        
+        response = requests.post(
+            f"{BACKEND_URL}/api/send-contact",
+            json=test_payload,
+            timeout=30
+        )
+        
+        print(f"Status Code: {response.status_code}")
+        
+        if response.status_code == 422:  # Validation error expected
+            data = response.json()
+            print(f"Response: {json.dumps(data, indent=2)}")
+            print("✅ Short message validation working correctly")
+            return True
+        elif response.status_code == 200:
+            print("❌ Short message was accepted - validation not working")
+            return False
+        else:
+            print(f"❌ Unexpected status code {response.status_code}")
+            try:
+                error_data = response.json()
+                print(f"Error response: {json.dumps(error_data, indent=2)}")
+            except:
+                print(f"Error response (raw): {response.text}")
+            return False
+            
+    except Exception as e:
+        print(f"❌ Short message test failed - error: {e}")
+        return False
+
 def main():
     """Run all backend tests"""
     print("🎬 Starting Backend API Tests for Cinematic Website")
@@ -209,6 +386,18 @@ def main():
     else:
         results["caching"] = False
         print("\n⚠️  Skipping caching test due to image generation failure")
+    
+    # Test 4: Contact Form - Valid Submission
+    results["contact_form_valid"] = test_contact_form_valid()
+    
+    # Test 5: Contact Form - Invalid Email
+    results["contact_form_invalid_email"] = test_contact_form_invalid_email()
+    
+    # Test 6: Contact Form - Missing Name
+    results["contact_form_missing_name"] = test_contact_form_missing_name()
+    
+    # Test 7: Contact Form - Short Message
+    results["contact_form_short_message"] = test_contact_form_short_message()
     
     # Summary
     print("\n" + "="*50)
