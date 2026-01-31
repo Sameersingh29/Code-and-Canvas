@@ -392,14 +392,14 @@ const PortfolioContent = () => (
   </motion.div>
 );
 
-// Benefits Content
+// Benefits Content - Fully Responsive with improved grid
 const BenefitsContent = () => (
   <motion.div
     initial={{ opacity: 0, y: 40 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.8, delay: 0.2 }}
     viewport={{ once: true }}
-    className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-6xl mx-auto w-full px-4"
+    className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 max-w-6xl mx-auto w-full px-2 sm:px-4"
   >
     {benefitsData.map((benefit, index) => (
       <motion.div
@@ -408,11 +408,11 @@ const BenefitsContent = () => (
         whileInView={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: index * 0.1 }}
         viewport={{ once: true }}
-        className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 text-center hover:bg-white/15 transition-all duration-300"
+        className="bg-white/10 backdrop-blur-md rounded-xl p-3 sm:p-4 border border-white/20 text-center hover:bg-white/15 transition-all duration-300"
       >
-        <benefit.icon className="text-violet-400 mx-auto mb-3" size={28} />
-        <h3 className="text-sm font-semibold text-white mb-1">{benefit.title}</h3>
-        <p className="text-gray-400 text-xs leading-relaxed">{benefit.description}</p>
+        <benefit.icon className="text-violet-400 mx-auto mb-2 sm:mb-3" size={24} />
+        <h3 className="text-xs sm:text-sm font-semibold text-white mb-1">{benefit.title}</h3>
+        <p className="text-gray-400 text-xs leading-relaxed hidden xs:block">{benefit.description}</p>
       </motion.div>
     ))}
   </motion.div>
