@@ -596,9 +596,8 @@ const ContactSection = () => {
   };
 
   return (
-    <section ref={ref} className="snap-section relative min-h-screen w-full bg-gradient-to-br from-gray-50 to-white overflow-y-auto">
-      <motion.div 
-        style={{ y: contentY, opacity: contentOpacity }}
+    <section className="snap-section relative min-h-screen w-full bg-gradient-to-br from-gray-50 to-white overflow-y-auto">
+      <div 
         className="min-h-screen flex flex-col justify-start sm:justify-center items-center px-3 xs:px-4 sm:px-6 md:px-12 lg:px-16 pt-16 xs:pt-20 sm:pt-24 pb-12 xs:pb-14 sm:pb-12"
       >
         <motion.div
