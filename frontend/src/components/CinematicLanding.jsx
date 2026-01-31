@@ -303,11 +303,9 @@ const FullScreenSection = ({ title, subtitle, children, imagePrompt, sectionId, 
     offset: ["start end", "end start"]
   });
 
-  // Dramatic parallax effects
+  // Dramatic parallax effects - only for background, not content opacity
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
   const backgroundScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.1, 1, 1.1]);
-  const contentY = useTransform(scrollYProgress, [0, 0.5, 1], [100, 0, -100]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   useEffect(() => {
     const generateImage = async () => {
@@ -364,11 +362,8 @@ const FullScreenSection = ({ title, subtitle, children, imagePrompt, sectionId, 
       {/* Dynamic Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
 
-      {/* Content with Parallax */}
-      <motion.div 
-        style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-10 h-full flex flex-col justify-center items-center px-3 xs:px-4 sm:px-6 md:px-12 lg:px-16 pt-14 xs:pt-16 sm:pt-20 pb-6 xs:pb-8 sm:pb-12"
-      >
+      {/* Content - removed scroll-based opacity for better visibility */}
+      <div className="relative z-10 h-full flex flex-col justify-center items-center px-3 xs:px-4 sm:px-6 md:px-12 lg:px-16 pt-14 xs:pt-16 sm:pt-20 pb-6 xs:pb-8 sm:pb-12">
         <motion.div
           initial={{ opacity: 0, y: 60 }}
           whileInView={{ opacity: 1, y: 0 }}
