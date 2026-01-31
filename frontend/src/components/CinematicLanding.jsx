@@ -248,7 +248,7 @@ const HeroSection = () => {
   );
 };
 
-// Full Screen Section with AI Generated Background
+// Full Screen Section with AI Generated Background - Fully Responsive
 const FullScreenSection = ({ title, subtitle, children, imagePrompt, sectionId, fallbackImage }) => {
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -292,7 +292,7 @@ const FullScreenSection = ({ title, subtitle, children, imagePrompt, sectionId, 
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
-              className="w-12 h-12 border-4 border-violet-500 border-t-transparent rounded-full"
+              className="w-8 h-8 sm:w-12 sm:h-12 border-4 border-violet-500 border-t-transparent rounded-full"
             />
           </div>
         ) : (
@@ -308,19 +308,19 @@ const FullScreenSection = ({ title, subtitle, children, imagePrompt, sectionId, 
       </div>
 
       {/* Content */}
-      <div className="relative z-10 h-full flex flex-col justify-center items-center px-6 md:px-16">
+      <div className="relative z-10 h-full flex flex-col justify-center items-center px-4 sm:px-6 md:px-12 lg:px-16 pt-16 sm:pt-20 pb-8 sm:pb-12">
         <motion.div
           initial={{ opacity: 0, y: 60 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-6 sm:mb-8 md:mb-12"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+          <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2 sm:mb-4 px-2">
             {title}
           </h2>
           {subtitle && (
-            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 max-w-2xl mx-auto px-2">
               {subtitle}
             </p>
           )}
