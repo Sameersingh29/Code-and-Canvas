@@ -8,6 +8,23 @@ import { useToast } from '../hooks/use-toast';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
+// Custom hook for responsive detection
+const useMediaQuery = (query) => {
+  const [matches, setMatches] = useState(false);
+  
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    if (media.matches !== matches) {
+      setMatches(media.matches);
+    }
+    const listener = () => setMatches(media.matches);
+    media.addEventListener('change', listener);
+    return () => media.removeEventListener('change', listener);
+  }, [matches, query]);
+  
+  return matches;
+};
+
 // Section data
 const servicesData = [
   { id: 1, icon: Palette, title: "Custom Landing Pages", description: "Tailored landing pages designed to capture your brand's unique personality and drive conversions.", features: ["Custom Design", "Mobile Responsive", "Fast Loading", "SEO Optimized"] },
