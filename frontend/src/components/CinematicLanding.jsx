@@ -488,15 +488,6 @@ const ContactSection = () => {
   const [errors, setErrors] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
-  const ref = useRef(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-
-  const contentY = useTransform(scrollYProgress, [0, 0.5], [50, 0]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   // Validate individual field
   const validateField = (name, value) => {
