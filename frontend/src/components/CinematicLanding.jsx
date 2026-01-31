@@ -382,7 +382,7 @@ const FullScreenSection = ({ title, subtitle, children, imagePrompt, sectionId, 
         </motion.div>
 
         {children}
-      </motion.div>
+      </div>
     </section>
   );
 };
