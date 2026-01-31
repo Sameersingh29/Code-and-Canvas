@@ -123,6 +123,18 @@ backend:
         agent: "testing"
         comment: "✅ All backend tests passed: Health check (GET /api/) working correctly. Image generation (POST /api/generate-image) successfully generates cinematic images using Gemini Nano Banana in ~15 seconds, returns valid base64 image data. Caching mechanism working perfectly - cached requests 170x faster (0.08s vs 14-18s). API handles test payload correctly: prompt='A cinematic view of a modern creative design studio', section_id='test-services'. Generated image size: 654KB, valid PNG format."
 
+  - task: "Contact Form Email Endpoint"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ Contact form endpoint (POST /api/send-contact) fully tested and working correctly. All test cases passed: (1) Valid submission - successfully sends emails via Gmail SMTP to inquirecodeandcanvas@gmail.com, returns success:true with proper message; (2) Email validation - correctly rejects invalid email format with 422 status and proper error details; (3) Missing required fields - properly validates missing name field with 422 status; (4) Message length validation - correctly rejects messages under 10 characters with 422 status. Backend logs confirm email was successfully sent. All validation working as expected using Pydantic EmailStr and Field constraints."
+
 frontend:
   - task: "Cinematic Landing Page with Scroll-Snap Layout"
     implemented: true
