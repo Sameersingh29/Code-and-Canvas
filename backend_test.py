@@ -11,7 +11,7 @@ import base64
 from datetime import datetime
 
 # Backend URL from frontend/.env
-BACKEND_URL = "https://responsive-web-19.preview.emergentagent.com"
+BACKEND_URL = "https://responsive-parallax.preview.emergentagent.com"
 
 def test_health_check():
     """Test the health check endpoint"""
