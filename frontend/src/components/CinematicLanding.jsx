@@ -332,14 +332,14 @@ const FullScreenSection = ({ title, subtitle, children, imagePrompt, sectionId, 
   );
 };
 
-// Services Content
+// Services Content - Fully Responsive
 const ServicesContent = () => (
   <motion.div
     initial={{ opacity: 0, y: 40 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.8, delay: 0.2 }}
     viewport={{ once: true }}
-    className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto w-full px-4"
+    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto w-full px-2 sm:px-4"
   >
     {servicesData.map((service, index) => (
       <motion.div
@@ -348,15 +348,15 @@ const ServicesContent = () => (
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: index * 0.15 }}
         viewport={{ once: true }}
-        className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300"
+        className="bg-white/10 backdrop-blur-md rounded-xl p-4 sm:p-6 border border-white/20 hover:bg-white/15 transition-all duration-300"
       >
-        <service.icon className="text-violet-400 mb-4" size={36} />
-        <h3 className="text-xl font-semibold text-white mb-2">{service.title}</h3>
-        <p className="text-gray-300 text-sm mb-4">{service.description}</p>
+        <service.icon className="text-violet-400 mb-3 sm:mb-4" size={28} />
+        <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">{service.title}</h3>
+        <p className="text-gray-300 text-xs sm:text-sm mb-3 sm:mb-4">{service.description}</p>
         <ul className="space-y-1">
           {service.features.map((feature, i) => (
             <li key={i} className="text-gray-400 text-xs flex items-center gap-2">
-              <span className="w-1 h-1 bg-violet-400 rounded-full" />
+              <span className="w-1 h-1 bg-violet-400 rounded-full flex-shrink-0" />
               {feature}
             </li>
           ))}
