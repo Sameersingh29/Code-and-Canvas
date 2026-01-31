@@ -123,6 +123,21 @@ backend:
         agent: "testing"
         comment: "✅ All backend tests passed: Health check (GET /api/) working correctly. Image generation (POST /api/generate-image) successfully generates cinematic images using Gemini Nano Banana in ~15 seconds, returns valid base64 image data. Caching mechanism working perfectly - cached requests 170x faster (0.08s vs 14-18s). API handles test payload correctly: prompt='A cinematic view of a modern creative design studio', section_id='test-services'. Generated image size: 654KB, valid PNG format."
 
+  - task: "Contact Form Email API"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Implemented POST /api/send-contact endpoint using Gmail SMTP. Features: email validation with Pydantic EmailStr, name/message validation, HTML and plain text email templates, stores submissions in MongoDB."
+      - working: true
+        agent: "testing"
+        comment: "✅ All 4 test cases passed: Valid submission sends email successfully, email validation rejects invalid formats, required field validation works, message length validation works. Emails delivered via Gmail SMTP to inquirecodeandcanvas@gmail.com."
+
   - task: "Contact Form Email Endpoint"
     implemented: true
     working: true
