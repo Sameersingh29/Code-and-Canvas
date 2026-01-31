@@ -46,10 +46,10 @@ const benefitsData = [
   { id: 5, icon: Headphones, title: "Ongoing Support", description: "Continued support and updates to keep your site running smoothly." }
 ];
 
-// Header Component
+// Header Component - Fully Responsive
 const Header = ({ currentSection }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isLightSection = currentSection === 3; // Contact section
+  const isLightSection = currentSection === 4; // Contact section (index 4)
 
   const scrollToSection = (index) => {
     const sections = document.querySelectorAll('.snap-section');
@@ -65,12 +65,12 @@ const Header = ({ currentSection }) => {
       animate={{ y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isLightSection ? 'bg-white/90 backdrop-blur-md border-b border-gray-200' : 'bg-transparent'
+        isLightSection ? 'bg-white/90 backdrop-blur-md border-b border-gray-200' : 'bg-black/20 backdrop-blur-sm'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between">
         <motion.div
-          className="text-2xl font-bold tracking-tight"
+          className="text-lg sm:text-xl md:text-2xl font-bold tracking-tight"
           whileHover={{ scale: 1.02 }}
         >
           <span className={`bg-gradient-to-r from-violet-500 to-purple-600 bg-clip-text text-transparent`}>
@@ -78,12 +78,12 @@ const Header = ({ currentSection }) => {
           </span>
         </motion.div>
 
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-4 xl:gap-8">
           {['Home', 'Services', 'Portfolio', 'Why Us', 'Contact'].map((item, index) => (
             <button
               key={item}
               onClick={() => scrollToSection(index)}
-              className={`text-sm font-medium transition-all duration-300 hover:opacity-100 ${
+              className={`text-xs xl:text-sm font-medium transition-all duration-300 hover:opacity-100 ${
                 currentSection === index
                   ? isLightSection ? 'text-violet-600 opacity-100' : 'text-white opacity-100'
                   : isLightSection ? 'text-gray-600 opacity-70 hover:text-violet-600' : 'text-white/70 hover:text-white'
@@ -96,14 +96,15 @@ const Header = ({ currentSection }) => {
 
         <Button
           onClick={() => scrollToSection(4)}
-          className="hidden md:flex bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white border-0"
+          className="hidden lg:flex bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white border-0 text-xs xl:text-sm px-4 xl:px-6 py-2"
         >
           Get Started
         </Button>
 
         <button
-          className="md:hidden"
+          className="lg:hidden p-2 -mr-2 touch-manipulation"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
         >
           {mobileMenuOpen ? (
             <X className={isLightSection ? 'text-gray-900' : 'text-white'} size={24} />
@@ -119,18 +120,28 @@ const Header = ({ currentSection }) => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-black/95 backdrop-blur-lg"
+            className="lg:hidden bg-black/95 backdrop-blur-lg border-t border-white/10"
           >
-            <div className="px-6 py-4 flex flex-col gap-4">
+            <div className="px-4 sm:px-6 py-4 flex flex-col gap-1">
               {['Home', 'Services', 'Portfolio', 'Why Us', 'Contact'].map((item, index) => (
                 <button
                   key={item}
                   onClick={() => scrollToSection(index)}
-                  className="text-white/80 hover:text-white text-left py-2 text-lg"
+                  className={`text-left py-3 px-2 text-base sm:text-lg rounded-lg transition-colors touch-manipulation ${
+                    currentSection === index
+                      ? 'text-violet-400 bg-violet-500/10'
+                      : 'text-white/80 hover:text-white hover:bg-white/5'
+                  }`}
                 >
                   {item}
                 </button>
               ))}
+              <Button
+                onClick={() => scrollToSection(4)}
+                className="mt-4 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white border-0 w-full py-3"
+              >
+                Get Started
+              </Button>
             </div>
           </motion.div>
         )}
