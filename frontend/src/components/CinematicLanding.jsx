@@ -366,14 +366,14 @@ const ServicesContent = () => (
   </motion.div>
 );
 
-// Portfolio Content
+// Portfolio Content - Fully Responsive
 const PortfolioContent = () => (
   <motion.div
     initial={{ opacity: 0, y: 40 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.8, delay: 0.2 }}
     viewport={{ once: true }}
-    className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto w-full px-4"
+    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto w-full px-2 sm:px-4"
   >
     {portfolioData.map((project, index) => (
       <motion.div
@@ -382,11 +382,11 @@ const PortfolioContent = () => (
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: index * 0.15 }}
         viewport={{ once: true }}
-        className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 group cursor-pointer"
+        className="bg-white/10 backdrop-blur-md rounded-xl p-4 sm:p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 group cursor-pointer"
       >
         <span className="text-xs text-violet-400 font-medium uppercase tracking-wider">{project.category}</span>
-        <h3 className="text-xl font-semibold text-white mt-2 mb-2 group-hover:text-violet-300 transition-colors">{project.title}</h3>
-        <p className="text-gray-400 text-sm">{project.description}</p>
+        <h3 className="text-lg sm:text-xl font-semibold text-white mt-2 mb-2 group-hover:text-violet-300 transition-colors">{project.title}</h3>
+        <p className="text-gray-400 text-xs sm:text-sm">{project.description}</p>
       </motion.div>
     ))}
   </motion.div>
