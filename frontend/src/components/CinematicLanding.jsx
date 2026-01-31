@@ -150,7 +150,7 @@ const Header = ({ currentSection }) => {
   );
 };
 
-// Hero Section with Parallax
+// Hero Section with Parallax - Fully Responsive
 const HeroSection = () => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -183,13 +183,13 @@ const HeroSection = () => {
       {/* Content */}
       <motion.div
         style={{ opacity }}
-        className="relative z-10 h-full flex flex-col justify-center px-6 md:px-16 lg:px-24"
+        className="relative z-10 h-full flex flex-col justify-center px-4 sm:px-6 md:px-12 lg:px-16 xl:px-24 pt-16 sm:pt-20"
       >
         <motion.h1
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight tracking-tight"
+          className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-white leading-tight tracking-tight"
         >
           Code and Canvas
         </motion.h1>
@@ -198,7 +198,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="mt-4 text-xl md:text-2xl lg:text-3xl text-gray-300 italic font-light"
+          className="mt-2 sm:mt-4 text-base sm:text-xl md:text-2xl lg:text-3xl text-gray-300 italic font-light"
         >
           Your vision our code
         </motion.p>
@@ -207,7 +207,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.7 }}
-          className="mt-6 text-base md:text-lg text-gray-400 max-w-xl leading-relaxed"
+          className="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg text-gray-400 max-w-xl leading-relaxed"
         >
           We transform your business ideas into stunning, high-converting landing pages that captivate your audience and drive results.
         </motion.p>
@@ -216,32 +216,32 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.9 }}
-          className="mt-10 flex flex-col sm:flex-row gap-4"
+          className="mt-6 sm:mt-10 flex flex-col sm:flex-row gap-4"
         >
           <Button
             onClick={scrollToNext}
-            className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white px-8 py-6 text-lg rounded-lg"
+            className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-lg w-full sm:w-auto touch-manipulation"
           >
             Explore <ArrowRight className="ml-2" size={20} />
           </Button>
         </motion.div>
       </motion.div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator - Hidden on very small screens */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10"
+        className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 z-10 hidden xs:flex"
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
-          className="flex flex-col items-center cursor-pointer"
+          className="flex flex-col items-center cursor-pointer touch-manipulation"
           onClick={scrollToNext}
         >
-          <span className="text-white/60 text-sm mb-2">Scroll</span>
-          <ArrowDown className="text-white/60" size={20} />
+          <span className="text-white/60 text-xs sm:text-sm mb-2">Scroll</span>
+          <ArrowDown className="text-white/60" size={18} />
         </motion.div>
       </motion.div>
     </section>
