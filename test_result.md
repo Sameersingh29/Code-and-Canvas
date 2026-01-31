@@ -186,7 +186,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Image Generation API with Gemini Nano Banana"
+    - "Contact Form Email Endpoint"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
