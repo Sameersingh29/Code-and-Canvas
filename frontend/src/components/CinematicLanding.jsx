@@ -760,7 +760,7 @@ const ContactSection = () => {
         >
           © {new Date().getFullYear()} Code and Canvas. All rights reserved.
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 };
