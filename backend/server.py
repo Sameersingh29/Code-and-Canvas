@@ -177,6 +177,136 @@ async def get_generated_image(section_id: str):
     return Response(content=image_bytes, media_type="image/png")
 
 
+# Contact Form Models
+class ContactFormRequest(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    email: EmailStr
+    message: str = Field(..., min_length=10, max_length=2000)
+
+
+class ContactFormResponse(BaseModel):
+    success: bool
+    message: str
+
+
+@api_router.post("/send-contact", response_model=ContactFormResponse)
+async def send_contact_email(request: ContactFormRequest):
+    """Send contact form email via Gmail SMTP"""
+    try:
+        smtp_email = os.getenv("SMTP_EMAIL")
+        smtp_password = os.getenv("SMTP_PASSWORD")
+        
+        if not smtp_email or not smtp_password:
+            logger.error("SMTP credentials not configured")
+            raise HTTPException(status_code=500, detail="Email service not configured")
+        
+        # Create email message
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = f"New Contact Form Submission from {request.name}"
+        msg['From'] = smtp_email
+        msg['To'] = smtp_email  # Send to inquirecodeandcanvas@gmail.com
+        msg['Reply-To'] = request.email  # So you can reply directly to the sender
+        
+        # Plain text version
+        text_content = f"""
+New Contact Form Submission
+
+Name: {request.name}
+Email: {request.email}
+
+Message:
+{request.message}
+
+---
+This email was sent from the Code and Canvas website contact form.
+"""
+        
+        # HTML version
+        html_content = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {{ font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; }}
+        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+        .header {{ background: linear-gradient(135deg, #7c3aed 0%, #9333ea 100%); color: white; padding: 30px; border-radius: 10px 10px 0 0; }}
+        .content {{ background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }}
+        .field {{ margin-bottom: 20px; }}
+        .label {{ font-weight: 600; color: #6b7280; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }}
+        .value {{ font-size: 16px; color: #1f2937; margin-top: 5px; }}
+        .message-box {{ background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #7c3aed; margin-top: 10px; }}
+        .footer {{ text-align: center; margin-top: 20px; color: #9ca3af; font-size: 12px; }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="margin: 0; font-size: 24px;">New Contact Form Submission</h1>
+            <p style="margin: 10px 0 0 0; opacity: 0.9;">Someone wants to work with you!</p>
+        </div>
+        <div class="content">
+            <div class="field">
+                <div class="label">Name</div>
+                <div class="value">{request.name}</div>
+            </div>
+            <div class="field">
+                <div class="label">Email</div>
+                <div class="value"><a href="mailto:{request.email}" style="color: #7c3aed;">{request.email}</a></div>
+            </div>
+            <div class="field">
+                <div class="label">Message</div>
+                <div class="message-box">{request.message.replace(chr(10), '<br>')}</div>
+            </div>
+        </div>
+        <div class="footer">
+            Sent from Code and Canvas website contact form
+        </div>
+    </div>
+</body>
+</html>
+"""
+        
+        part1 = MIMEText(text_content, 'plain')
+        part2 = MIMEText(html_content, 'html')
+        msg.attach(part1)
+        msg.attach(part2)
+        
+        # Send email via Gmail SMTP
+        logger.info(f"Attempting to send contact email from {request.name} ({request.email})")
+        
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+            server.login(smtp_email, smtp_password)
+            server.send_message(msg)
+        
+        logger.info(f"Successfully sent contact email from {request.name}")
+        
+        # Store in database for records
+        contact_doc = {
+            "id": str(uuid.uuid4()),
+            "name": request.name,
+            "email": request.email,
+            "message": request.message,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "email_sent": True
+        }
+        await db.contact_submissions.insert_one(contact_doc)
+        
+        return ContactFormResponse(
+            success=True,
+            message="Thank you! Your message has been sent successfully."
+        )
+        
+    except smtplib.SMTPAuthenticationError as e:
+        logger.error(f"SMTP Authentication failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Email authentication failed")
+    except smtplib.SMTPException as e:
+        logger.error(f"SMTP error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to send email")
+    except Exception as e:
+        logger.error(f"Error sending contact email: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to send message: {str(e)}")
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
