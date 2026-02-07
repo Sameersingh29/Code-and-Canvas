@@ -13,9 +13,8 @@ import base64
 from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 import google.genai as genai
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail, Email, To, Content, MimeType
 
 
 ROOT_DIR = Path(__file__).parent
@@ -208,37 +207,17 @@ class ContactFormResponse(BaseModel):
 
 @api_router.post("/send-contact", response_model=ContactFormResponse)
 async def send_contact_email(request: ContactFormRequest):
-    """Send contact form email via Gmail SMTP"""
+    """Send contact form email via SendGrid API"""
     try:
-        smtp_email = os.getenv("SMTP_EMAIL")
-        smtp_password = os.getenv("SMTP_PASSWORD")
+        sendgrid_api_key = os.getenv("SENDGRID_API_KEY")
+        recipient_email = os.getenv("CONTACT_EMAIL")
+        from_email = os.getenv("FROM_EMAIL")
         
-        if not smtp_email or not smtp_password:
-            logger.error("SMTP credentials not configured")
+        if not sendgrid_api_key:
+            logger.error("SendGrid API key not configured")
             raise HTTPException(status_code=500, detail="Email service not configured")
         
-        # Create email message
-        msg = MIMEMultipart('alternative')
-        msg['Subject'] = f"New Contact Form Submission from {request.name}"
-        msg['From'] = smtp_email
-        msg['To'] = smtp_email  # Send to inquirecodeandcanvas@gmail.com
-        msg['Reply-To'] = request.email  # So you can reply directly to the sender
-        
-        # Plain text version
-        text_content = f"""
-New Contact Form Submission
-
-Name: {request.name}
-Email: {request.email}
-
-Message:
-{request.message}
-
----
-This email was sent from the Code and Canvas website contact form.
-"""
-        
-        # HTML version
+        # HTML email content
         html_content = f"""
 <!DOCTYPE html>
 <html>
@@ -283,19 +262,28 @@ This email was sent from the Code and Canvas website contact form.
 </html>
 """
         
-        part1 = MIMEText(text_content, 'plain')
-        part2 = MIMEText(html_content, 'html')
-        msg.attach(part1)
-        msg.attach(part2)
+        # Create SendGrid message
+        message = Mail(
+            from_email=Email(from_email, "Code and Canvas"),
+            to_emails=To(recipient_email),
+            subject=f"New Contact Form Submission from {request.name}",
+            html_content=Content(MimeType.html, html_content)
+        )
         
-        # Send email via Gmail SMTP
+        # Add reply-to header so you can reply directly to the sender
+        message.reply_to = Email(request.email, request.name)
+        
         logger.info(f"Attempting to send contact email from {request.name} ({request.email})")
         
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-            server.login(smtp_email, smtp_password)
-            server.send_message(msg)
+        # Send via SendGrid API
+        sg = SendGridAPIClient(sendgrid_api_key)
+        response = sg.send(message)
         
-        logger.info(f"Successfully sent contact email from {request.name}")
+        if response.status_code >= 200 and response.status_code < 300:
+            logger.info(f"Successfully sent contact email from {request.name} (status: {response.status_code})")
+        else:
+            logger.error(f"SendGrid returned status {response.status_code}")
+            raise HTTPException(status_code=500, detail="Failed to send email")
         
         # Store in database for records
         contact_doc = {
@@ -313,12 +301,8 @@ This email was sent from the Code and Canvas website contact form.
             message="Thank you! Your message has been sent successfully."
         )
         
-    except smtplib.SMTPAuthenticationError as e:
-        logger.error(f"SMTP Authentication failed: {str(e)}")
-        raise HTTPException(status_code=500, detail="Email authentication failed")
-    except smtplib.SMTPException as e:
-        logger.error(f"SMTP error: {str(e)}")
-        raise HTTPException(status_code=500, detail="Failed to send email")
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error sending contact email: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to send message: {str(e)}")
