@@ -564,11 +564,12 @@ const ContactSection = () => {
         })
       });
       
-      const data = await response.json();
-      
       if (!response.ok) {
+        const data = await response.json();
         throw new Error(data.detail || 'Failed to send message');
       }
+
+      const data = await response.json();
       
       setSubmitStatus('success');
       toast({
@@ -632,7 +633,7 @@ const ContactSection = () => {
                 <Phone className="mt-0.5 sm:mt-1 flex-shrink-0" size={16} />
                 <div>
                   <p className="text-white/70 text-[10px] xs:text-xs sm:text-sm">Phone</p>
-                  <p className="text-xs xs:text-sm sm:text-base">+1 (555) 123-4567</p>
+                  <p className="text-xs xs:text-sm sm:text-base">+91 8549005811</p>
                 </div>
               </div>
               <div className="flex items-start gap-2.5 xs:gap-3 sm:gap-4">

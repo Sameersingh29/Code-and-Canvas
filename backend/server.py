@@ -11,7 +11,8 @@ from typing import List, Optional
 import uuid
 import base64
 from datetime import datetime, timezone
-import google.generativeai as genai
+from contextlib import asynccontextmanager
+import google.genai as genai
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -25,8 +26,18 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Create the main app without a prefix
-app = FastAPI()
+
+# Lifespan context manager for startup/shutdown events
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: nothing needed here currently
+    yield
+    # Shutdown: close MongoDB connection
+    client.close()
+
+
+# Create the main app with lifespan handler
+app = FastAPI(lifespan=lifespan)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
@@ -110,8 +121,8 @@ async def generate_image(request: ImageGenerationRequest):
         if not api_key:
             raise HTTPException(status_code=500, detail="GEMINI_API_KEY not configured")
         
-        # Configure Gemini API
-        genai.configure(api_key=api_key)
+        # Configure new Gemini API client
+        client_genai = genai.Client(api_key=api_key)
         
         # Enhanced cinematic prompt
         enhanced_prompt = f"""Create a stunning, cinematic, high-resolution image for a professional business website background.
@@ -131,26 +142,28 @@ The image should evoke professionalism, creativity, and innovation."""
         
         logger.info(f"Generating image for section: {request.section_id}")
         
-        # Use Gemini 2.0 Flash for image generation
-        model = genai.GenerativeModel('gemini-2.0-flash')
-        response = model.generate_content(enhanced_prompt)
+        # Use new API with gemini-2.0-flash-exp model
+        response = client_genai.models.generate_content(
+            model='gemini-2.0-flash-exp',
+            contents=enhanced_prompt
+        )
         
         # Check if response contains images
-        if not response.parts:
+        if not response.candidates or not response.candidates[0].content.parts:
             raise HTTPException(status_code=500, detail="No image was generated")
         
         # Extract image data from response
         image_part = None
-        for part in response.parts:
-            if part.mime_type.startswith('image/'):
+        for part in response.candidates[0].content.parts:
+            if hasattr(part, 'inline_data') and part.inline_data:
                 image_part = part
                 break
         
-        if not image_part or not image_part.data:
+        if not image_part or not image_part.inline_data.data:
             raise HTTPException(status_code=500, detail="No image data in response")
         
         # Encode image to base64
-        image_data = base64.b64encode(image_part.data).decode('utf-8')
+        image_data = base64.b64encode(image_part.inline_data.data).decode('utf-8')
         
         # Cache the result
         generated_images_cache[request.section_id] = image_data
@@ -321,7 +334,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    client.close()
