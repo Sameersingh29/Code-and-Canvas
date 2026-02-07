@@ -142,9 +142,9 @@ The image should evoke professionalism, creativity, and innovation."""
         
         logger.info(f"Generating image for section: {request.section_id}")
         
-        # Use new API with gemini-2.0-flash-exp model
+        # Use new API with gemini-2.5-flash-image model
         response = client_genai.models.generate_content(
-            model='gemini-2.0-flash-exp',
+            model='gemini-2.5-flash-image',
             contents=enhanced_prompt
         )
         
