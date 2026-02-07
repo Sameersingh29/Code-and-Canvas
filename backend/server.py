@@ -11,7 +11,7 @@ from typing import List, Optional
 import uuid
 import base64
 from datetime import datetime, timezone
-# from emergentintegrations.llm.chat import LlmChat, UserMessage
+import google.generativeai as genai
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -96,7 +96,7 @@ logger = logging.getLogger(__name__)
 
 @api_router.post("/generate-image", response_model=ImageGenerationResponse)
 async def generate_image(request: ImageGenerationRequest):
-    """Generate a cinematic image using Gemini Nano Banana"""
+    """Generate a cinematic image using Google Gemini"""
     try:
         # Check cache first
         if request.section_id in generated_images_cache:
@@ -106,20 +106,12 @@ async def generate_image(request: ImageGenerationRequest):
                 section_id=request.section_id
             )
         
-        api_key = os.getenv("EMERGENT_LLM_KEY")
+        api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
-            raise HTTPException(status_code=500, detail="EMERGENT_LLM_KEY not configured")
+            raise HTTPException(status_code=500, detail="GEMINI_API_KEY not configured")
         
-        # Create a unique session for this generation
-        session_id = f"image-gen-{request.section_id}-{uuid.uuid4()}"
-        
-        chat = LlmChat(
-            api_key=api_key,
-            session_id=session_id,
-            system_message="You are an expert cinematic image generator. Create stunning, high-quality, professional images suitable for website backgrounds."
-        )
-        
-        chat.with_model("gemini", "gemini-3-pro-image-preview").with_params(modalities=["image", "text"])
+        # Configure Gemini API
+        genai.configure(api_key=api_key)
         
         # Enhanced cinematic prompt
         enhanced_prompt = f"""Create a stunning, cinematic, high-resolution image for a professional business website background.
@@ -136,17 +128,29 @@ Style requirements:
 - Suitable for a web agency/design studio website
 
 The image should evoke professionalism, creativity, and innovation."""
-
-        msg = UserMessage(text=enhanced_prompt)
         
         logger.info(f"Generating image for section: {request.section_id}")
-        text_response, images = await chat.send_message_multimodal_response(msg)
         
-        if not images or len(images) == 0:
+        # Use Gemini 2.0 Flash for image generation
+        model = genai.GenerativeModel('gemini-2.0-flash')
+        response = model.generate_content(enhanced_prompt)
+        
+        # Check if response contains images
+        if not response.parts:
             raise HTTPException(status_code=500, detail="No image was generated")
         
-        # Get the first generated image
-        image_data = images[0]['data']
+        # Extract image data from response
+        image_part = None
+        for part in response.parts:
+            if part.mime_type.startswith('image/'):
+                image_part = part
+                break
+        
+        if not image_part or not image_part.data:
+            raise HTTPException(status_code=500, detail="No image data in response")
+        
+        # Encode image to base64
+        image_data = base64.b64encode(image_part.data).decode('utf-8')
         
         # Cache the result
         generated_images_cache[request.section_id] = image_data
