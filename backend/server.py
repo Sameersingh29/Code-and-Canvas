@@ -217,6 +217,10 @@ async def send_contact_email(request: ContactFormRequest):
             logger.error("SendGrid API key not configured")
             raise HTTPException(status_code=500, detail="Email service not configured")
         
+        if not recipient_email or not from_email:
+            logger.error(f"Email config missing - CONTACT_EMAIL: {recipient_email}, FROM_EMAIL: {from_email}")
+            raise HTTPException(status_code=500, detail="Email configuration incomplete")
+        
         # HTML email content
         html_content = f"""
 <!DOCTYPE html>
@@ -304,7 +308,18 @@ async def send_contact_email(request: ContactFormRequest):
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Error sending contact email: {str(e)}")
+        # Log more details for SendGrid errors
+        error_msg = str(e)
+        if hasattr(e, 'body'):
+            error_msg = f"{error_msg} - Body: {e.body}"
+        if hasattr(e, 'status_code'):
+            error_msg = f"{error_msg} - Status: {e.status_code}"
+        if hasattr(e, 'reason'):
+            error_msg = f"{error_msg} - Reason: {e.reason}"
+        if hasattr(e, 'to_dict'):
+            error_msg = f"{error_msg} - Dict: {e.to_dict}"
+        logger.error(f"Error sending contact email: {error_msg}")
+        logger.error(f"FROM_EMAIL used: {from_email}, CONTACT_EMAIL used: {recipient_email}")
         raise HTTPException(status_code=500, detail=f"Failed to send message: {str(e)}")
 
 
@@ -314,7 +329,7 @@ app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=["https://code-and-canvas.vercel.app"],
+    allow_origins=["https://code-and-canvas.vercel.app","*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
