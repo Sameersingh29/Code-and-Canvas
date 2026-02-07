@@ -94,6 +94,6 @@ export const benefits = [
 
 export const contactInfo = {
   email: "inquirecodeandcanvas@gmail.com",
-  phone: "+1 (555) 123-4567",
+  phone: "+91 8549005811",
   instagram: "@codeandcanvas"
 };
